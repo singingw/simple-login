@@ -14,7 +14,7 @@ router.get('/', (req, res) => {
   if (req.session.user) {
     return res.redirect(`/welcome`)
   }
-  res.render('login')
+  return res.render('login')
 })
 router.post('/', (req, res) => {
   const { Email, Password } = req.body
@@ -31,15 +31,11 @@ router.post('/', (req, res) => {
 router.get('/welcome', (req, res) => {
   const name = req.session.user
   res.render('index', { name })
-  User.findOne(name)
-    .lean()
-    .then((name) => res.render('login', { name }))
-    .catch(error => console.error(error))
 })
 router.post('/logout', (req, res) => {
   req.session.destroy(() => {
     console.log('session destroyed')
   })
-  res.redirect(`/`)
+  return res.redirect(`/`)
 })
 module.exports = router
